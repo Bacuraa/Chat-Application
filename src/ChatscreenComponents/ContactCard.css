@@ -1,0 +1,27 @@
+#latestComment{
+    font-size: 14px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+#time{
+color: grey;
+font-size: small;
+position: fixed;
+padding-left: 115px;
+}
+
+#wrapper{
+    display: grid;
+    grid-template-columns: 0.6fr 2fr;
+}
+#wrapper-2{
+    display: grid;
+}
+#wrapper-3{
+    display: flex;
+}
+
+#clicker{
+    overflow-x: hidden;
+}
