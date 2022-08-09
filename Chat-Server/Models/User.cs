@@ -12,8 +12,6 @@ namespace ChatAppWebAPI.Models
         public String Password { get; set; }
         [Required]
         public virtual List<Contact> Contacts { get; set; }
-
-        public String Token { get; set; }
        
     }
 }

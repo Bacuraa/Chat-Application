@@ -1,5 +1,4 @@
 ﻿using ChatAppWebAPI.Models;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
@@ -22,6 +21,26 @@ namespace ChatWebAPI.Models
             {
                 db.UsersDB.Add(user);
                 db.SaveChanges();
+            }
+        }
+
+        public Boolean checkUserExistance(string username)
+        {
+            using (var db = new UsersContext())
+            {
+                var user = db.UsersDB.FirstOrDefault(x => x.Username == username);
+                if (user == null)
+                    return false;
+                else return true;
+            }
+        }
+
+        public User getSpecificUser(string username)
+        {
+            using (var db = new UsersContext())
+            {
+                return db.UsersDB.Where(x => x.Username == username)
+                    .Include(x => x.Contacts).ThenInclude(x => x.messages).ToList()[0];
             }
         }
 
@@ -86,8 +105,7 @@ namespace ChatWebAPI.Models
                 string key = username + contactId;
                 List<Contact> contact = contactsDB.Where(x => x.Id == key).Include(x => x.messages).ToList();
                 if (contact == null || contact[0] == null) return;
-                contact[0].Name = name;
-                contact[0].Server = server;
+                contact[0].DisplayName = name;
                 db.SaveChanges();
             }
         }
@@ -120,9 +138,8 @@ namespace ChatWebAPI.Models
                 // creating a new contact
                 contact = new Contact();
                 contact.Id = key;
-                contact.ContactUsername = invitation.From;
-                contact.Name = invitation.From;
-                contact.Server = invitation.Server;
+                contact.Username = invitation.From;
+                contact.DisplayName = invitation.From;
                 contact.messages = new List<Message>();
                 contact.Last = "";
                 contact.LastDate = "";
@@ -144,7 +161,7 @@ namespace ChatWebAPI.Models
                 List<User> user = usersDB.Where(x => x.Username == username)
                     .Include(x => x.Contacts).ThenInclude(x => x.messages).ToList();
                 if (user == null || user[0] == null) return null;
-                Contact contact = user[0].Contacts.Find(x => x.ContactUsername == contactUsername);
+                Contact contact = user[0].Contacts.Find(x => x.Username == contactUsername);
                 if (contact == null) return null;
                 return contact.messages.OrderBy(x => x.SerialNumber);
             }
@@ -233,8 +250,8 @@ namespace ChatWebAPI.Models
                 ////////////////////////////////////////////// Firebase ///////////////////////////////////////////////////////
                 List<User> user = usersDB.Where(x => x.Username == transfer.To).ToList();
                 if (user.Count == 0) return;
-                string token = user[0].Token;
-                if (token == "") return;
+                //string token = user[0].Token;
+                //if (token == "") return;
 
                 if (FirebaseApp.DefaultInstance == null )
                 {
@@ -246,7 +263,7 @@ namespace ChatWebAPI.Models
                 
 
                 // This registration token comes from the client FCM SDKs.
-                var registrationToken = token;
+                //var registrationToken = token;
 
                 // See documentation on defining a message payload.
                 var messageFirebase = new FirebaseAdmin.Messaging.Message()
@@ -255,7 +272,7 @@ namespace ChatWebAPI.Models
     {
         { "myData", transfer.From },
     },
-                    Token = registrationToken,
+                    //Token = registrationToken,
                     Notification = new FirebaseAdmin.Messaging.Notification()
                     {
                         Title = transfer.From,

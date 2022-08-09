@@ -4,7 +4,7 @@ namespace ChatWebAPI
 {
     public class UsersContext : DbContext
     {
-        private const string connectionString = "server=localhost;port=3306;database=chatDB;user=root;password=P@$$W0rd";
+        private const string connectionString = "server=localhost;port=3306;database=chatDB;user=root;password=1";
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseMySql(connectionString, MariaDbServerVersion.AutoDetect(connectionString));

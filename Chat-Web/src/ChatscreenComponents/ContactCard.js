@@ -3,13 +3,13 @@ import './ContactCard.css'
 
 const ContactCard = (props) => {
     //user's friend nicknames
-    const userFriends = props.userFriends
+    const contacts = props.contacts
     //user's friends objects
     var friendsObjects = []
 
     function creatingFriendsArr(user) {
 
-        if (userFriends.includes(user.nickname)) {
+        if (contacts.includes(user.nickname)) {
             friendsObjects.push(user)
         }
     }
@@ -17,10 +17,10 @@ const ContactCard = (props) => {
     usersList.forEach(creatingFriendsArr)
 
     function timeago(friend) {
-        if(props.loggingUser.nickname>=friend.nickname){
-            var combinedString = props.loggingUser.lastMessages.get(props.loggingUser.nickname + friend.nickname)
+        if(props.loggedUser.nickname>=friend.nickname){
+            var combinedString = props.loggedUser.lastMessages.get(props.loggedUser.nickname + friend.nickname)
         } else {
-            var combinedString = props.loggingUser.lastMessages.get(friend.nickname + props.loggingUser.nickname)
+            var combinedString = props.loggedUser.lastMessages.get(friend.nickname + props.loggedUser.nickname)
         }
         if (typeof combinedString === 'string'){
         let splitString = combinedString.split('*')
@@ -49,10 +49,10 @@ const ContactCard = (props) => {
     }
 
     function lastMessages(friend){
-        if(props.loggingUser.nickname>=friend.nickname){
-            var combinedString = props.loggingUser.lastMessages.get(props.loggingUser.nickname + friend.nickname)
+        if(props.loggedUser.nickname>=friend.nickname){
+            var combinedString = props.loggedUser.lastMessages.get(props.loggedUser.nickname + friend.nickname)
         } else {
-            var combinedString = props.loggingUser.lastMessages.get(friend.nickname + props.loggingUser.nickname)
+            var combinedString = props.loggedUser.lastMessages.get(friend.nickname + props.loggedUser.nickname)
         }
         if (typeof combinedString === 'string'){
             let splitString = combinedString.split('*');
@@ -65,7 +65,7 @@ const ContactCard = (props) => {
         <ul className="list-unstyled chat-list overflow-auto h-100">
             {
                 friendsObjects.map((friend) => (
-                    <div onClick={() => { props.setFriendChat(friend) }} id="clicker">
+                    <div onClick={() => { props.setCurrentContactChat(friend) }} id="clicker">
                         <li id="wrapper">
                             <img src={friend.avatar} />
                             <div id="#wrapper-2">

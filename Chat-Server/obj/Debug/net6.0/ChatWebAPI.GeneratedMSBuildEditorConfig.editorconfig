@@ -8,41 +8,41 @@ build_property.PlatformNeutralAssembly =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = ChatWebAPI
 build_property.RootNamespace = ChatWebAPI
-build_property.ProjectDir = C:\Users\Micha\OneDrive\Desktop\GitServer\ChatWebAPI\
+build_property.ProjectDir = C:\Users\Micha\OneDrive\Desktop\Chat-Application\Chat-Application\Chat-Server\
 build_property.RazorLangVersion = 6.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\Micha\OneDrive\Desktop\GitServer\ChatWebAPI
+build_property.MSBuildProjectDirectory = C:\Users\Micha\OneDrive\Desktop\Chat-Application\Chat-Application\Chat-Server
 build_property._RazorSourceGeneratorDebug = 
 
-[C:/Users/Micha/OneDrive/Desktop/GitServer/ChatWebAPI/Views/Shared/_ValidationScriptsPartial.cshtml]
+[C:/Users/Micha/OneDrive/Desktop/Chat-Application/Chat-Application/Chat-Server/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Micha/OneDrive/Desktop/GitServer/ChatWebAPI/Views/Transfer/Create.cshtml]
+[C:/Users/Micha/OneDrive/Desktop/Chat-Application/Chat-Application/Chat-Server/Views/Transfer/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJhbnNmZXJcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Micha/OneDrive/Desktop/GitServer/ChatWebAPI/Views/Transfer/Delete.cshtml]
+[C:/Users/Micha/OneDrive/Desktop/Chat-Application/Chat-Application/Chat-Server/Views/Transfer/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJhbnNmZXJcRGVsZXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Micha/OneDrive/Desktop/GitServer/ChatWebAPI/Views/Transfer/Details.cshtml]
+[C:/Users/Micha/OneDrive/Desktop/Chat-Application/Chat-Application/Chat-Server/Views/Transfer/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJhbnNmZXJcRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Micha/OneDrive/Desktop/GitServer/ChatWebAPI/Views/Transfer/Edit.cshtml]
+[C:/Users/Micha/OneDrive/Desktop/Chat-Application/Chat-Application/Chat-Server/Views/Transfer/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJhbnNmZXJcRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Micha/OneDrive/Desktop/GitServer/ChatWebAPI/Views/Transfer/Index.cshtml]
+[C:/Users/Micha/OneDrive/Desktop/Chat-Application/Chat-Application/Chat-Server/Views/Transfer/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJhbnNmZXJcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Micha/OneDrive/Desktop/GitServer/ChatWebAPI/Views/Users/Login.cshtml]
+[C:/Users/Micha/OneDrive/Desktop/Chat-Application/Chat-Application/Chat-Server/Views/Users/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlcnNcTG9naW4uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Micha/OneDrive/Desktop/GitServer/ChatWebAPI/Views/Users/Register.cshtml]
+[C:/Users/Micha/OneDrive/Desktop/Chat-Application/Chat-Application/Chat-Server/Views/Users/Register.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlcnNcUmVnaXN0ZXIuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 

@@ -9,7 +9,6 @@ namespace ChatAppWebAPI.Models
         public string User1 { get; set; }
         [Required]
         public string User2 { get; set; }
-
         List<Message> Messages { get; set; }
     }
 }

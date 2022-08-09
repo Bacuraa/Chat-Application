@@ -10,8 +10,6 @@ namespace ChatAppWebAPI.Models
         public String DisplayName { get; set; }
         [Required]
         public String Password { get; set; }
-
-        public String Token { get; set; }
        
     }
 }

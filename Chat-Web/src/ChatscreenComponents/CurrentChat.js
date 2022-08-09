@@ -3,21 +3,21 @@ import './Chatscreen.css'
 import './CurrentChat.css'
 
 const CurrentChat = (props) => {
-    // we will get the total messages from the loggingUser
-    var totalMessages = props.loggingUser.chats
-    // now we will filter the array to get messages only between the loggingUser and his friend
-    var loggingUserMessages = totalMessages.filter(message =>
-    ((message.author == props.loggingUser.nickname && message.receiver == props.hisFriend.nickname) ||
-        (message.author == props.hisFriend.nickname && message.receiver == props.loggingUser.nickname)))
+    // we will get the total messages from the loggedUser
+    var totalMessages = props.loggedUser.chats
+    // now we will filter the array to get messages only between the loggedUser and his friend
+    var loggedUserMessages = totalMessages.filter(message =>
+    ((message.author == props.loggedUser.nickname && message.receiver == props.currentContactChat.nickname) ||
+        (message.author == props.currentContactChat.nickname && message.receiver == props.loggedUser.nickname)))
 
 
     return (
         <ul className="chat-history overflow-auto h-100" id="chat-messages-list">
             {
-                loggingUserMessages.map((message) => {
+                loggedUserMessages.map((message) => {
                     if (message.type == "text") {
                         return (
-                            message.author == props.loggingUser.nickname ?
+                            message.author == props.loggedUser.nickname ?
                                 (<li className="clearfix chat-messages">
                                     <div className="message-data">
                                     </div>

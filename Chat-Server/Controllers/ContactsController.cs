@@ -13,53 +13,28 @@ namespace ChatWebAPI.Controllers
         [HttpGet]
         [Route("/api/{username}/[controller]")]
         // gets contacts by username (DB change done)
-        public IEnumerable<Contact> Get(string username)
+        public List<Contact> Get(string username)
         {
-            List<Contact> contacts = serverDB.getContacts(username);
-            return contacts;
-            //List<ContactNoMessages> contactNomessages = new List<ContactNoMessages>();
-            //foreach (Contact contact in contacts)
-            //{
-            //    ContactNoMessages contactNomessages1 = new ContactNoMessages();
-            //    contactNomessages1.Id = contact.ContactUsername;
-            //    contactNomessages1.Name = contact.Name;
-            //    contactNomessages1.Server = contact.Server;
-            //    contactNomessages1.Last = contact.Last;
-            //    contactNomessages1.LastDate = contact.LastDate;
-            //    contactNomessages.Add(contactNomessages1);
-            //}
-            //return contactNomessages;
+            return serverDB.getContacts(username);
         }
 
         [HttpPost]
         [Route("/api/{username}/[controller]")]
         // adds new contact to a user (DB change done)
-        public void Post(string username, [Bind("Id, ContactUsername, Name,Server,Last,LastDate")] ContactOld contactOld)
+        public void Post(string username, [Bind("Username, DisplayName")] Contact contact)
         {
-            Contact contact = new Contact();
-            contact.Id = contactOld.Id;
-            String[]  contactId = contactOld.Id.Split(username);
-            contact.ContactUsername = contactId[1];
-            contact.Name = contactOld.Name;
-            contact.Server = contactOld.Server;
-            contact.Last = contactOld.Last;
-            contact.LastDate = contactOld.LastDate;
+            contact.Id = contact.Username + serverDB.getContacts(username).Count();
+            contact.Last = "";
+            contact.LastDate = "";
             serverDB.addContact(username, contact);
         }
 
         [HttpGet]
         [Route("/api/{username}/[controller]/{contactId}")]
         // returns a specific contact (DB change done)
-        public ContactNoMessages Details(string username, string contactId)
+        public Contact Details(string username, string contactId)
         {
-            Contact contact = serverDB.getSpecificContact(username, contactId);
-            ContactNoMessages contactNoMessages = new ContactNoMessages();
-            contactNoMessages.Id = contact.ContactUsername;
-            contactNoMessages.Name = contact.Name;
-            contactNoMessages.Server = contact.Server;
-            contactNoMessages.Last = contact.Last;
-            contactNoMessages.LastDate = contact.LastDate;
-            return contactNoMessages;
+            return serverDB.getSpecificContact(username, contactId);
         }
 
         [HttpPut]
@@ -69,8 +44,6 @@ namespace ChatWebAPI.Controllers
         {
             serverDB.editContact(username, contactId, name, server);
         }
-
-
 
         // GET: Contacts/Delete/5
         [HttpDelete]

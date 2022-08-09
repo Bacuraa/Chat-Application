@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Micha\\OneDrive\\Desktop\\GitServer\\ChatWebAPI\\ChatWebAPI.csproj": {}
+    "C:\\Users\\Micha\\OneDrive\\Desktop\\Chat-Application\\Chat-Application\\Chat-Server\\ChatWebAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Micha\\OneDrive\\Desktop\\GitServer\\ChatWebAPI\\ChatWebAPI.csproj": {
+    "C:\\Users\\Micha\\OneDrive\\Desktop\\Chat-Application\\Chat-Application\\Chat-Server\\ChatWebAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Micha\\OneDrive\\Desktop\\GitServer\\ChatWebAPI\\ChatWebAPI.csproj",
+        "projectUniqueName": "C:\\Users\\Micha\\OneDrive\\Desktop\\Chat-Application\\Chat-Application\\Chat-Server\\ChatWebAPI.csproj",
         "projectName": "ChatWebAPI",
-        "projectPath": "C:\\Users\\Micha\\OneDrive\\Desktop\\GitServer\\ChatWebAPI\\ChatWebAPI.csproj",
+        "projectPath": "C:\\Users\\Micha\\OneDrive\\Desktop\\Chat-Application\\Chat-Application\\Chat-Server\\ChatWebAPI.csproj",
         "packagesPath": "C:\\Users\\Micha\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Micha\\OneDrive\\Desktop\\GitServer\\ChatWebAPI\\obj\\",
+        "outputPath": "C:\\Users\\Micha\\OneDrive\\Desktop\\Chat-Application\\Chat-Application\\Chat-Server\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Micha\\AppData\\Roaming\\NuGet\\NuGet.Config",

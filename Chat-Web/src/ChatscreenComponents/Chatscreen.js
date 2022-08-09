@@ -3,52 +3,62 @@ import './Chatscreen.css'
 import ContactCard from './ContactCard';
 import { useState, useEffect } from 'react'
 import AddFriend from './AddFriend';
-import usersList from '../usersDB';
 import CurrentChat from './CurrentChat';
 import Message from '../Message';
 import AudioMsg from '../AudioMsg';
+import { useLocation } from 'react-router-dom';
 
-function Chatscreen(props) {
-    var loggedPersonUsername = localStorage.getItem("currentUser")
-    var loggingUser = usersList.find(x => x.username == loggedPersonUsername)
-    const [friends, setFriends] = useState(loggingUser.friends);
-    const [friendChat, setFriendChat] = useState("")
+function Chatscreen() {
+    const { state } = useLocation();
+    const { username } = state;
+    const [loggedUser, setLoggedUser] = useState('');
+    //getting the user from the database (with his contacts and his messages)
+    useEffect(async () => {
+        await fetch('http://localhost:5000/api/Users', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ Username: username })
+        })
+        const currentUser = await Response.JSON();
+        setLoggedUser(currentUser);
+    }, [state])
+    
+    const [contacts, setContacts] = useState(loggedUser.Contacts);
+    const [currentContactChat, setCurrentContactChat] = useState("")
 
-    const [userMessages, setMessage] = useState(loggingUser.chats)
-    var handleSendMessage = () => {
+    var handleSendMessage = async () => {
         var newMessageText = document.getElementById("chatBar").value
         // blank message
         if (newMessageText == "") { return }
-        var time = new Date().getTime()
-        var newMessage = new Message(newMessageText, time, "text", loggingUser.nickname, friendChat.nickname)
-        if(loggingUser.nickname>=friendChat.nickname){
-            loggingUser.lastMessages.set(loggingUser.nickname + friendChat.nickname, newMessageText + "*" + time)
-            friendChat.lastMessages.set(loggingUser.nickname + friendChat.nickname, newMessageText + "*" + time)
-        } else {
-            loggingUser.lastMessages.set(friendChat.nickname + loggingUser.nickname, newMessageText + "*" + time)
-            friendChat.lastMessages.set(friendChat.nickname + loggingUser.nickname, newMessageText + "*" + time)
-        }
-        loggingUser.chats.push(newMessage)
-        // temporary line, thats the work of the server
-        friendChat.chats.push(newMessage)
-        document.getElementById("chatBar").value = "";
-        setMessage((messages) => {
-            let newUserMessage = [...messages]
-            newUserMessage.push(newMessage)
-            return newUserMessage
+        var newMessage = new Message(newMessageText, loggedUser.DisplayName, currentContactChat.nickname)
+        // adds the message to the server's DB
+        const addMsg = async() =>{
+            await fetch('http://localhost:5000/api/' + username + '/Contacts/' + currentContactChat + '/Messages', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({Content: newMessageText })
+        })}
+        await addMsg();
+
+        const getCurrentContactChat = async() =>{
+            await fetch('http://localhost:5000/api/' + username + '/Contacts/' + currentContactChat, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
         })
+        const currentContactChat = await Response.JSON();
+        setCurrentContactChat(currentContactChat);
     }
-
-    var clickImageInput = () => {
-        document.getElementById("imageInput").click();
+        await getCurrentContactChat();
     }
-
-    var clickVideoInput = () => {
-        document.getElementById("videoInput").click();
-    }
-    const element = document.getElementById("chat-messages-list");        
+    const element = document.getElementById("chat-messages-list");
     useEffect(() => {
-        if (element){
+        if (element) {
             element.scrollTop = element.scrollHeight
         }
     })
@@ -59,51 +69,22 @@ function Chatscreen(props) {
                 <div className="people-list" id="people-list">
                     <div className="chat-header" id="profileAndButton">
                         <div id="myProfile">
-                        <div><img id="myAvatar" src={loggingUser.avatar} /></div>
-                        <div><span id="myNickname">{loggingUser.nickname}</span></div>
+                            <div><img id="myAvatar" src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp" /></div>
+                            <div><span id="myNickname">{loggedUser.DisplayName}</span></div>
                         </div>
-                        <AddFriend loggingUser={loggingUser} setFriends={setFriends} />
+                        <AddFriend loggedUser={loggedUser} setContacts={setContacts} />
                     </div>
-                    <ContactCard loggingUser={loggingUser} userFriends={friends} setFriendChat={setFriendChat} />
+                    <ContactCard loggedUser={loggedUser} contacts={contacts} setCurrentContactChat={setCurrentContactChat} />
                 </div>
                 <div className="chat" id="rightSide">
                     <div className="chat-header" id="chat-header" >
                         <div id="chat-header-avatar-name">
-                            <img src={friendChat.avatar} id="chat-header-avatar" />
-                            <div className="chat-about" id="chat-header-name">{friendChat.nickname}</div>
+                            <img src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp" id="chat-header-avatar" />
+                            <div className="chat-about" id="chat-header-name">{currentContactChat.nickname}</div>
                         </div>
                     </div>
-                    <CurrentChat loggingUser={loggingUser} hisFriend={friendChat} />
+                    <CurrentChat loggedUser={loggedUser} currentContactChat={currentContactChat} />
                     <div className="input-group mb-3" id="chat-line">
-                        <div className="input-group-prepend">
-                            <input id="imageInput" type="file" onChange={handleImageMsg} accept="image/*" hidden></input>
-
-                            <button className="iconBoxes bi bi-image" id="imageUpload" onClick={clickImageInput}><i> </i></button>
-
-                            <input id="videoInput" type="file" onChange={handleVideoMsg} accept="video/*"  hidden></input>
-
-                            <button className="iconBoxes bi bi-camera-reels" id="videoUpload" onClick={clickVideoInput}><i ></i></button>
-
-
-                            <button type="button" className="iconBoxes bi bi-mic" data-bs-toggle="modal" data-bs-target="#exampleModal" id="recordingUpload"></button>
-
-                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabel">Audio Recording</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <AudioMsg setFriendChat={setFriendChat} loggingUser={loggingUser} userMessages={userMessages} setMessage={setMessage}></AudioMsg>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                         <input type="text" className="form-control" id="chatBar" placeholder="New message here..."></input>
                         <button className="btn btn-secondary" id="chatBox" type="button" onClick={handleSendMessage}> Send</button>
                     </div>
