@@ -1,56 +1,68 @@
-import {Link, useNavigate} from "react-router-dom";
-import usersList from './usersDB'
+import { Link, useNavigate } from "react-router-dom";
 import './Loginform.css'
 
 function LoginForm() {
-    const navigate = useNavigate();
+    const loginClick = async () => {
+        let password = document.getElementById("password").value;
+        let username = document.getElementById("username").value;
+        // checking if the username inserted is valid
+        var response1 = await fetch('http://localhost:5000/api/Users', {
+            method: 'HEAD',
+            headers: {
+                'Content-Type' : 'application/json'},
+            body: JSON.stringify({Username: username})
+        })
+        // if status == 404, user doesnt exist
+        if (response1.status == 404) {
+            alert("Username doesnt exist")
+            return;
+        }
 
-    const loginClick = () => {
-        let loggingPassword,loggingID;
-        loggingPassword = document.getElementById("loginPassword").value;
-        loggingID = document.getElementById("loginID").value;
-    
-        var loggingUser = usersList.find(x => x.username === loggingID);
-        if (!loggingUser)
-            alert("No such username");
-        else if ((loggingUser) && loggingUser.password === loggingPassword) {
-            localStorage.setItem('currentUser', loggingUser.username)
-        navigate("/chat");
+        var response2 = await fetch('http://localhost:5000/api/Users/' + username, {
+            method: 'HEAD',
+            headers: {
+                'Content-Type' : 'application/json'},
+            body: JSON.stringify({Password: password})
+        })
+        // if status == 404, wrong password
+        if (response2.status == 404) {
+            alert("Wrong password")
+            return;
         }
-        else {
-            alert("Wrong password");
-        }
+
+        const navigate = useNavigate();
+        navigate("/chat", {state : {username: username}});
     }
 
     return (
         <div className="loginbox">
-        <form action="">
-        <span className="d-flex justify-content-center">
-            <div>
-                <div className="d-flex justify-content-center">
-                    <h1>Login page</h1>
-                </div>
-                <br />
-                <div className="row mb-3">
-                    <label htmlFor="loginID" className="col-sm-3 col-form-label col-form-label-sm">Username</label>
-                    <div className="col-sm-7">
-                        <input type="username" className="form-control form-control-sm" id="loginID" placeholder="Enter Username" required/>
+            <form action="">
+                <span className="d-flex justify-content-center">
+                    <div>
+                        <div className="d-flex justify-content-center">
+                            <h1>Login page</h1>
+                        </div>
+                        <br />
+                        <div className="row mb-3">
+                            <label htmlFor="Username" className="col-sm-3 col-form-label col-form-label-sm">Username</label>
+                            <div className="col-sm-7">
+                                <input type="username" className="form-control form-control-sm" id="username" placeholder="Enter Username" required />
+                            </div>
+                        </div>
+
+                        <div className="row mb-3">
+                            <label htmlFor="password" className="col-sm-3 col-form-label-sm">Password</label>
+                            <div className="col-sm-7">
+                                <input type="password" className="form-control form-control-sm" id="password" placeholder="Enter password" required />
+                            </div>
+                        </div>
+                        <div className="row-sm">
+                            <button type="button" className="btn btn-secondary" onClick={loginClick}>Login</button>
+                            <label className="m-1">Not registered? click <Link to="/register">here</Link> to register</label>
+                        </div>
                     </div>
-                </div>
-                
-                <div className="row mb-3">
-                    <label htmlFor="loginPassword" className="col-sm-3 col-form-label-sm">Password</label>
-                    <div className="col-sm-7">
-                        <input type="password" className="form-control form-control-sm" id="loginPassword" placeholder="Enter password" required/>
-                    </div>
-                </div>
-                <div className="row-sm">
-                    <button type="button" className="btn btn-secondary" onClick = {loginClick}>Login</button>
-                    <label className="m-1">Not registered? click <Link to="/register">here</Link> to register</label>
-                </div>
-            </div>            
-        </span>
-        </form>
+                </span>
+            </form>
         </div>
     );
 }

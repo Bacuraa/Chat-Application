@@ -31,16 +31,30 @@ namespace ChatWebAPI.Controllers
         [HttpHead]
         [Route("/api/[controller]")]
         // checks if username exists in the DB
-        public Boolean CheckIfUserExists([Bind("Username")] string username)
+        public IActionResult CheckIfUserExists([Bind("Username")] string username)
         {
-            return serverDB.checkUserExistance(username);
+            // "checkUserExistance" returns true if the user already exists
+            if (serverDB.checkUserExistance(username))
+                return Ok();
+            return NotFound();
         }
+
         [HttpGet]
         [Route("/api/[controller]/{username}")]
         // returns a specific user
         public User GetUser(string username)
         {
             return serverDB.getSpecificUser(username);
+        }
+
+        [HttpHead]
+        [Route("/api/[controller]/{username}")]
+        // checks if the password inserted matches the usernames's password
+        public IActionResult CheckPassword(string username ,[Bind("Password")] string password)
+        {
+            if (serverDB.checkPassword(username, password))
+                return Ok();
+            return NotFound();
         }
     }
 }

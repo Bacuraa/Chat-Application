@@ -11,13 +11,14 @@ function Registerform() {
         var passwordVerification = document.getElementById("Password-verification").value;
         var paswd=  /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{5,}$/;
         //checks if username already exists in the server's database
-        var usernameExists = await fetch('http://localhost:5000/api/Users', {
+        var response = await fetch('http://localhost:5000/api/Users', {
             method: 'HEAD',
             headers: {
                 'Content-Type' : 'application/json'},
             body: JSON.stringify({Username: username})
         })
-        if (usernameExists) {
+        // if status != 404, the user exists
+        if (response.status != 404) {
             alert("Username already exists")
         }
         //no blank password

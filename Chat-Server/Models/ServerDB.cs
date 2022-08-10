@@ -28,7 +28,7 @@ namespace ChatWebAPI.Models
         {
             using (var db = new UsersContext())
             {
-                var user = db.UsersDB.FirstOrDefault(x => x.Username == username);
+                var user = db.UsersDB.Find(username);
                 if (user == null)
                     return false;
                 else return true;
@@ -44,19 +44,16 @@ namespace ChatWebAPI.Models
             }
         }
 
-        //////////////////////////////////////////// LoginController //////////////////////////////////////////////////
-
-        public User getUser(string username)
+        public Boolean checkPassword(string username, string password)
         {
             using (var db = new UsersContext())
             {
-                List<User> user = db.UsersDB.Where(x => x.Username == username)
-                    .Include(x => x.Contacts).ThenInclude(x => x.messages).ToList();
-                if (user.Count == 0) return null;
-                return user[0];
+                User user = db.UsersDB.Find(username);
+                if (user.Password == password)
+                    return true;
+                return false;
             }
         }
-
 
         //////////////////////////////////////////// ContactsController //////////////////////////////////////////////////
 
@@ -122,6 +119,17 @@ namespace ChatWebAPI.Models
             }
         }
 
+        public Boolean checkContactExistence(string username, string contactUsername)
+        {
+            using (var db = new UsersContext())
+            {
+                var user = db.UsersDB.Where(x => x.Username == username).Include(x => x.Contacts).ToList();
+                var contactExistence = user[0].Contacts.Find(x => x.Username == contactUsername);
+                if (contactExistence == null) return false;
+                return true;
+            }
+        }
+
         ///////////////////////////////////////// invitationController /////////////////////////////////////////////
         public Boolean inviteContact(Invitation invitation)
         {
@@ -141,7 +149,7 @@ namespace ChatWebAPI.Models
                 contact.Username = invitation.From;
                 contact.DisplayName = invitation.From;
                 contact.messages = new List<Message>();
-                contact.Last = "";
+                contact.LastMessage = "";
                 contact.LastDate = "";
                 user[0].Contacts.Add(contact);
                 db.SaveChanges();
@@ -180,8 +188,8 @@ namespace ChatWebAPI.Models
                     .Include(x => x.messages).ToList();
                 if (contact == null || contact[0] == null) return;
                 contact[0].messages.Add(message);
-                contact[0].LastDate = DateTime.Now.ToString();
-                contact[0].Last = message.Content;
+                contact[0].LastDate = DateTime.UnixEpoch.ToString();
+                contact[0].LastMessage = message.Content;
                 db.SaveChanges();
             }
         }
@@ -233,7 +241,7 @@ namespace ChatWebAPI.Models
                 List<Contact> contact = contactsDB.Where(x => x.Id == key)
                     .Include(x => x.messages).ToList();
                 if (contact == null || contact[0] == null) return;
-                string time = DateTime.Now.ToString();
+                string time = DateTime.UnixEpoch.ToString();
                 int id = contact[0].messages.Count();
                 Message message = new Message()
                 {
@@ -245,7 +253,7 @@ namespace ChatWebAPI.Models
                 };
                 contact[0].messages.Add(message);
                 contact[0].LastDate = time;
-                contact[0].Last = transfer.Content;
+                contact[0].LastMessage = transfer.Content;
                 db.SaveChanges();
                 ////////////////////////////////////////////// Firebase ///////////////////////////////////////////////////////
                 List<User> user = usersDB.Where(x => x.Username == transfer.To).ToList();

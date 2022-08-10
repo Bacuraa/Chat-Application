@@ -11,7 +11,7 @@ namespace ChatWebAPI.Controllers
         private ServerDB serverDB = new ServerDB();
         [HttpGet]
         [Route("/api/{username}/Contacts/{contactId}/[controller]")]
-        // returns a list of messages from a specific contact (DB change done)
+        // returns a list of messages from a specific contact
         public IEnumerable<Message> Get(string username, string contactId)
         {
             return serverDB.getMessages(username, contactId);
@@ -20,7 +20,7 @@ namespace ChatWebAPI.Controllers
 
         [HttpPost]
         [Route("/api/{username}/Contacts/{contactId}/[controller]")]
-        // add a message (DB change done)
+        // add a message
         public void Post(string username, string contactId, [Bind("Content")] string content)
         {
             Message message = new Message();
@@ -34,7 +34,7 @@ namespace ChatWebAPI.Controllers
 
         [HttpGet]
         [Route("/api/{username}/Contacts/{contactId}/[controller]/{id}")]
-        // returns a specific message (DB change done)
+        // returns a specific message
         public Message Details(string username, string contactId, int id)
         {
             return serverDB.getSpecificMessage(username, contactId, id.ToString());
@@ -42,7 +42,7 @@ namespace ChatWebAPI.Controllers
 
         [HttpPut]
         [Route("/api/{username}/Contacts/{contactId}/[controller]/{id}")]
-        // edits a specific message (DB change done)
+        // edits a specific message
         public void Put(string username, string contactId, int id, string content)
         {
             serverDB.editSpecificMessage(username, contactId, id.ToString(), content);
@@ -50,7 +50,7 @@ namespace ChatWebAPI.Controllers
 
         [HttpDelete]
         [Route("/api/{username}/Contacts/{contactId}/[controller]/{id}")]
-        // deletes a specific message (DB change done)
+        // deletes a specific message
         public void Delete(string username, string contactId, int id)
         {
             serverDB.deleteSpecificMessage(username, contactId, id.ToString());

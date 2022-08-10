@@ -11,7 +11,7 @@ namespace ChatAppWebAPI.Models
         [Required]
         public String DisplayName { get; set; }
         [Required]
-        public String Last { get; set; }
+        public String LastMessage { get; set; }
         public string LastDate { get; set; }
         public virtual List<Message> messages { get; set; }
     }
