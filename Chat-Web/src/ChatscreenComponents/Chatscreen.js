@@ -4,14 +4,13 @@ import ContactCard from './ContactCard';
 import { useState, useEffect } from 'react'
 import AddFriend from './AddFriend';
 import CurrentChat from './CurrentChat';
-import Message from '../Message';
-import AudioMsg from '../AudioMsg';
 import { useLocation } from 'react-router-dom';
 
 function Chatscreen() {
     const { state } = useLocation();
     const { username } = state;
     const [loggedUser, setLoggedUser] = useState('');
+
     //getting the user from the database (with his contacts and his messages)
     useEffect(async () => {
         await fetch('http://localhost:5000/api/Users', {
@@ -30,9 +29,9 @@ function Chatscreen() {
 
     var handleSendMessage = async () => {
         var newMessageText = document.getElementById("chatBar").value
-        // blank message
+        // if the message is blank
         if (newMessageText == "") { return }
-        var newMessage = new Message(newMessageText, loggedUser.DisplayName, currentContactChat.nickname)
+
         // adds the message to the server's DB
         const addMsg = async() =>{
             await fetch('http://localhost:5000/api/' + username + '/Contacts/' + currentContactChat + '/Messages', {
@@ -44,18 +43,20 @@ function Chatscreen() {
         })}
         await addMsg();
 
-        const getCurrentContactChat = async() =>{
+        // gets the messages from the server's DB
+        const getCurrentContactMessages = async() =>{
             await fetch('http://localhost:5000/api/' + username + '/Contacts/' + currentContactChat, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
             }
         })
-        const currentContactChat = await Response.JSON();
-        setCurrentContactChat(currentContactChat);
+        const currentContactMessages = await Response.JSON();
+        setCurrentContactChat(currentContactMessages);
     }
-        await getCurrentContactChat();
+        await getCurrentContactMessages();
     }
+    // scrolls the chat bar down whenever an activity happens
     const element = document.getElementById("chat-messages-list");
     useEffect(() => {
         if (element) {
@@ -74,7 +75,7 @@ function Chatscreen() {
                         </div>
                         <AddFriend loggedUser={loggedUser} setContacts={setContacts} />
                     </div>
-                    <ContactCard loggedUser={loggedUser} contacts={contacts} setCurrentContactChat={setCurrentContactChat} />
+                    <ContactCard contacts={contacts} setCurrentContactChat={setCurrentContactChat} />
                 </div>
                 <div className="chat" id="rightSide">
                     <div className="chat-header" id="chat-header" >
@@ -83,7 +84,7 @@ function Chatscreen() {
                             <div className="chat-about" id="chat-header-name">{currentContactChat.nickname}</div>
                         </div>
                     </div>
-                    <CurrentChat loggedUser={loggedUser} currentContactChat={currentContactChat} />
+                    <CurrentChat currentContactChat={currentContactChat} />
                     <div className="input-group mb-3" id="chat-line">
                         <input type="text" className="form-control" id="chatBar" placeholder="New message here..."></input>
                         <button className="btn btn-secondary" id="chatBox" type="button" onClick={handleSendMessage}> Send</button>

@@ -1,32 +1,10 @@
-import usersList from "../usersDB"
 import './ContactCard.css'
 
 const ContactCard = (props) => {
-    //user's friend nicknames
-    const contacts = props.contacts
-    //user's friends objects
-    var friendsObjects = []
 
-    function creatingFriendsArr(user) {
+    function timeago(lastMessageTime) {
 
-        if (contacts.includes(user.nickname)) {
-            friendsObjects.push(user)
-        }
-    }
-    // creating the user's friends list out of our whole user Database
-    usersList.forEach(creatingFriendsArr)
-
-    function timeago(friend) {
-        if(props.loggedUser.nickname>=friend.nickname){
-            var combinedString = props.loggedUser.lastMessages.get(props.loggedUser.nickname + friend.nickname)
-        } else {
-            var combinedString = props.loggedUser.lastMessages.get(friend.nickname + props.loggedUser.nickname)
-        }
-        if (typeof combinedString === 'string'){
-        let splitString = combinedString.split('*')
-        var date = parseInt(splitString[1])
-
-        var seconds = Math.floor(((new Date().getTime() / 1000) - date / 1000));
+        var seconds = new Date().getTime() - lastMessageTime
 
         var interval = Math.floor(seconds / 31536000);
         if (interval >= 1) return interval + "y ago";
@@ -43,37 +21,22 @@ const ContactCard = (props) => {
         interval = Math.floor(seconds / 60);
         if (interval >= 1) return interval + "m ago";
 
-        return Math.floor(seconds) + "s ago";
-        }
-        else return ""
+        return seconds + "s ago";
     }
-
-    function lastMessages(friend){
-        if(props.loggedUser.nickname>=friend.nickname){
-            var combinedString = props.loggedUser.lastMessages.get(props.loggedUser.nickname + friend.nickname)
-        } else {
-            var combinedString = props.loggedUser.lastMessages.get(friend.nickname + props.loggedUser.nickname)
-        }
-        if (typeof combinedString === 'string'){
-            let splitString = combinedString.split('*');
-            return splitString[0]
-        }
-        else return ""
-        }
 
     return (
         <ul className="list-unstyled chat-list overflow-auto h-100">
             {
-                friendsObjects.map((friend) => (
-                    <div onClick={() => { props.setCurrentContactChat(friend) }} id="clicker">
+                props.contacts.map((contact) => (
+                    <div onClick={() => { props.setCurrentContactChat(contact) }} id="clicker">
                         <li id="wrapper">
-                            <img src={friend.avatar} />
+                            <img src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp" />
                             <div id="#wrapper-2">
                                 <div id="wrapper-3">
-                                    <span className="name">{friend.nickname}</span>
-                                    <span id="time"> {timeago(friend)} </span>
+                                    <span className="name">{contact.DisplayName}</span>
+                                    <span id="time"> {timeago(Number(contact.LastDate))} </span>
                                 </div>
-                                <div id="latestComment" > {lastMessages(friend)} </div>
+                                <div id="latestComment" > {contact.LastMessage} </div>
                             </div>
                         </li>
                     </div>
