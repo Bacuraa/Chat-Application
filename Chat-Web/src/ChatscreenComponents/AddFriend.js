@@ -1,3 +1,4 @@
+import { Button, Modal } from 'react-bootstrap/'
 import { useState } from 'react'
 import './AddFriend.css'
 
@@ -43,8 +44,7 @@ function AddFriend(props) {
             method: 'HEAD',
             headers: {
                 'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ Username: username })
+            }
         })
         if (checkContact.status != 404) {
             alert("The contact is already in your contacts list");

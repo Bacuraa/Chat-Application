@@ -2,36 +2,42 @@ import { Link, useNavigate } from "react-router-dom";
 import './Loginform.css'
 
 function LoginForm() {
+    const navigate = useNavigate();
     const loginClick = async () => {
         let password = document.getElementById("password").value;
         let username = document.getElementById("username").value;
         // checking if the username inserted is valid
-        var response1 = await fetch('http://localhost:5000/api/Users', {
+        var response1 = await fetch('http://localhost:5000/api/Users/' + username, {
             method: 'HEAD',
             headers: {
-                'Content-Type' : 'application/json'},
-            body: JSON.stringify({Username: username})
+                'Content-Type': 'application/json'
+            }
         })
         // if status == 404, user doesnt exist
         if (response1.status == 404) {
             alert("Username doesnt exist")
             return;
         }
-
-        var response2 = await fetch('http://localhost:5000/api/Users/' + username, {
+        //checking if the password is valid
+        var response2 = await fetch('http://localhost:5000/api/Users/' + username + '/' + password, {
             method: 'HEAD',
             headers: {
-                'Content-Type' : 'application/json'},
-            body: JSON.stringify({Password: password})
+                'Content-Type': 'application/json'
+            }
         })
         // if status == 404, wrong password
         if (response2.status == 404) {
             alert("Wrong password")
             return;
         }
-
-        const navigate = useNavigate();
-        navigate("/chat", {state : {username: username}});
+        // getting the new user from the server's DB
+        var user = await fetch('http://localhost:5000/api/Users/' + username, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        navigate("/chat", { state: { loggedUser: await user.json()}});
     }
 
     return (

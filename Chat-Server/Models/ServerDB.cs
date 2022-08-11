@@ -124,7 +124,7 @@ namespace ChatWebAPI.Models
             using (var db = new UsersContext())
             {
                 var user = db.UsersDB.Where(x => x.Username == username).Include(x => x.Contacts).ToList();
-                var contactExistence = user[0].Contacts.Find(x => x.Username == contactUsername);
+                var contactExistence = user[0].Contacts.Find(x => x.ContactUsername == contactUsername);
                 if (contactExistence == null) return false;
                 return true;
             }
@@ -146,7 +146,7 @@ namespace ChatWebAPI.Models
                 // creating a new contact
                 contact = new Contact();
                 contact.Id = key;
-                contact.Username = invitation.From;
+                contact.ContactUsername = invitation.From;
                 contact.DisplayName = invitation.From;
                 contact.messages = new List<Message>();
                 contact.LastMessage = "";
@@ -169,7 +169,7 @@ namespace ChatWebAPI.Models
                 List<User> user = usersDB.Where(x => x.Username == username)
                     .Include(x => x.Contacts).ThenInclude(x => x.messages).ToList();
                 if (user == null || user[0] == null) return null;
-                Contact contact = user[0].Contacts.Find(x => x.Username == contactUsername);
+                Contact contact = user[0].Contacts.Find(x => x.ContactUsername == contactUsername);
                 if (contact == null) return null;
                 return contact.messages.OrderBy(x => x.SerialNumber);
             }

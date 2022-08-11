@@ -23,7 +23,7 @@ namespace ChatWebAPI.Controllers
         // adds new contact to a user
         public void Post(string username, [Bind("Username, DisplayName")] Contact contact)
         {
-            contact.Id = contact.Username + serverDB.getContacts(username).Count();
+            contact.Id = contact.ContactUsername + serverDB.getContacts(username).Count();
             contact.LastMessage = "";
             contact.LastDate = "";
             serverDB.addContact(username, contact);

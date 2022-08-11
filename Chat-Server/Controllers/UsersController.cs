@@ -29,9 +29,9 @@ namespace ChatWebAPI.Controllers
             serverDB.addUser(user);
         }
         [HttpHead]
-        [Route("/api/[controller]")]
+        [Route("/api/[controller]/{username}")]
         // checks if username exists in the DB
-        public IActionResult CheckIfUserExists([Bind("Username")] string username)
+        public IActionResult CheckIfUserExists(string username)
         {
             // "checkUserExistance" returns true if the user already exists
             if (serverDB.checkUserExistance(username))
@@ -48,9 +48,9 @@ namespace ChatWebAPI.Controllers
         }
 
         [HttpHead]
-        [Route("/api/[controller]/{username}")]
+        [Route("/api/[controller]/{username}/{password}")]
         // checks if the password inserted matches the usernames's password
-        public IActionResult CheckPassword(string username ,[Bind("Password")] string password)
+        public IActionResult CheckPassword(string username ,string password)
         {
             if (serverDB.checkPassword(username, password))
                 return Ok();

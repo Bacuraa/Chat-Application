@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "pIhnaaPQQeQ+A9200lKV6vhyRf80DMZ1p4wgTCTnKNurGv4ZEFhVQyRQWFJ2lxUoIMWt4Z3m7NKR50XDpcbPIw==",
+  "dgSpecHash": "726jiwms/9TnkLevOsDhKBbzmHXgEZ5KciYOgGY2r/T828k81Ham9tSOZbtRwNATo+GMjGxl6PLF0ZWHXEVoWw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Micha\\OneDrive\\Desktop\\Chat-Application\\Chat-Application\\Chat-Server\\ChatWebAPI.csproj",
+  "projectFilePath": "C:\\Users\\Micha\\OneDrive\\Desktop\\Chat-Application\\Chat-Application\\Chat-Server\\Chat-Server.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Micha\\.nuget\\packages\\firebaseadmin\\2.3.0\\firebaseadmin.2.3.0.nupkg.sha512",
     "C:\\Users\\Micha\\.nuget\\packages\\google.api.gax\\3.2.0\\google.api.gax.3.2.0.nupkg.sha512",

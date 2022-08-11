@@ -10121,9 +10121,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Micha\\OneDrive\\Desktop\\Chat-Application\\Chat-Application\\Chat-Server\\ChatWebAPI.csproj",
-      "projectName": "ChatWebAPI",
-      "projectPath": "C:\\Users\\Micha\\OneDrive\\Desktop\\Chat-Application\\Chat-Application\\Chat-Server\\ChatWebAPI.csproj",
+      "projectUniqueName": "C:\\Users\\Micha\\OneDrive\\Desktop\\Chat-Application\\Chat-Application\\Chat-Server\\Chat-Server.csproj",
+      "projectName": "Chat-Server",
+      "projectPath": "C:\\Users\\Micha\\OneDrive\\Desktop\\Chat-Application\\Chat-Application\\Chat-Server\\Chat-Server.csproj",
       "packagesPath": "C:\\Users\\Micha\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\Micha\\OneDrive\\Desktop\\Chat-Application\\Chat-Application\\Chat-Server\\obj\\",
       "projectStyle": "PackageReference",

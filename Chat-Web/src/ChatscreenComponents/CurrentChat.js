@@ -2,15 +2,16 @@ import React from 'react'
 import './Chatscreen.css'
 import './CurrentChat.css'
 
-currentContactChat
-loggedUser
-
 const CurrentChat = (props) => {
+    var messages;
+    if (props.currentContactChat.displayName === "")
+        messages = []
+    else messages = props.currentContactChat.messages
 
     return (
         <ul className="chat-history overflow-auto h-100" id="chat-messages-list">
             {
-                props.currentContactChat.Messages((message) => {
+                messages.map((message) => {
                     if (message.type == "text") {
                         return (
                             message.Created == true ?

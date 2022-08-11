@@ -7,7 +7,7 @@ namespace ChatAppWebAPI.Models
         [Key]
         public string Id { get; set; }
         [Required]
-        public String Username { get; set; }
+        public String ContactUsername { get; set; }
         [Required]
         public String DisplayName { get; set; }
         [Required]

@@ -1,53 +1,65 @@
-import {Link ,useNavigate} from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import './Registerform.css'
+import { useState } from 'react'
 
 function Registerform() {
-    const RegisterClick = async(e) => {
+    const navigate = useNavigate();
+    const [status, setStatus] = useState('');
+    const RegisterClick = async (e) => {
         e.preventDefault();
         // inserting the user's input into variables
         var username = document.getElementById("Username").value;
         var displayname = document.getElementById("Nickname").value;
         var password = document.getElementById("Password").value;
         var passwordVerification = document.getElementById("Password-verification").value;
-        var paswd=  /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{5,}$/;
+        var paswd = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{5,}$/;
         //checks if username already exists in the server's database
-        var response = await fetch('http://localhost:5000/api/Users', {
+        var response = await fetch('http://localhost:5000/api/Users/' + username, {
             method: 'HEAD',
             headers: {
-                'Content-Type' : 'application/json'},
-            body: JSON.stringify({Username: username})
+                'Content-Type': 'application/json'
+            }
         })
-        // if status != 404, the user exists
-        if (response.status != 404) {
+        // if status == 200, the user exists
+        if (response.status == 200) {
             alert("Username already exists")
+            return;
         }
         //no blank password
-        else if (!password){
+        if (!password) {
             alert("Enter a password")
+            return;
         }
-        else if (password.length < 5) {
+        if (password.length < 5) {
             alert("Password length should be at least 5 characters long")
-
+            return;
         }
-        
-        else if(!password.match(paswd)) {
+
+        if (!password.match(paswd)) {
             alert("Password must contain at least one numeric digit and a special character(!@#$%^&*)")
+            return;
         }
         //checks if passwords are the same
-        else if (passwordVerification !== password) {
-                    alert("Password doesn't match");
-                }
-        else {
+        if (passwordVerification !== password) {
+            alert("Password doesn't match");
+            return;
+        }
         //inserting the new user to the server's DB
         await fetch('http://localhost:5000/api/Users', {
             method: 'POST',
             headers: {
-                'Content-Type' : 'application/json'},
-            body: JSON.stringify({Username: username, Displayname: displayname, Password: password})
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ Username: username, Displayname: displayname, Password: password })
         })
-        const navigate = useNavigate();
-        navigate("/chat", {state : {username: username}});
-        }
+        // getting the new user from the server's DB
+        var user = await fetch('http://localhost:5000/api/Users/' + username, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        navigate("/chat", { state: { loggedUser: await user.json()}});
     }
     return (
         <div className="registerbox">
@@ -87,12 +99,12 @@ function Registerform() {
                     </div>
 
                     <div className="row-sm">
-                    <button type="button" onClick={RegisterClick} className="btn btn-primary">Register</button>
+                        <button type="button" onClick={RegisterClick} className="btn btn-primary">Register</button>
                         <label className="m-1">Already registered? click <Link to="/">here</Link> to login</label>
                     </div>
                 </div>
             </span>
-            </div>
+        </div>
     );
 }
 
