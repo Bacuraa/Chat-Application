@@ -53,29 +53,22 @@ function AddFriend(props) {
         }
 
         // adds the contact to the server's DB (the user that receives the friend request)
-        const addContactPost1 = async () => {
-            await fetch(`http://localhost:5000/api/Invitations`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ From: loggedUsername, To: contactUsername })
-            })
-        }
-
-        await addContactPost1();
+        await fetch(`http://localhost:5000/api/Invitations`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ From: loggedUsername, To: contactUsername })
+        })
 
         // adds the contact to the server's DB (current loggedUser)
-        const addContactPost2 = async () => {
-            await fetch('http://localhost:5000/api/' + loggedUsername + '/Contacts', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ Username: contactUsername, DisplayName: contactDisplayname })
-            })
-        }
-        await addContactPost2();
+        await fetch('http://localhost:5000/api/' + loggedUsername + '/Contacts', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ Username: contactUsername, DisplayName: contactDisplayname })
+        })
 
         // gets the new contact list from the server's DB
         var currentContacts = await fetch('http://localhost:5000/api/' + loggedUsername + '/Contacts', {
@@ -85,9 +78,10 @@ function AddFriend(props) {
             }
         })
         currentContacts = await currentContacts.json();
-        await props.setContacts(currentContacts);
+        props.setContacts(currentContacts);
+
         // invoke signalR for the receiving friend request user
-        await props.signalRConnection.invoke("SendMessage", contactUsername, loggedUsername);
+        props.signalRConnection.invoke("SendMessage", contactUsername, loggedUsername);
         handleClose();
     }
 

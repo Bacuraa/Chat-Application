@@ -4,7 +4,6 @@ import { useState } from 'react'
 
 function Registerform() {
     const navigate = useNavigate();
-    const [status, setStatus] = useState('');
     const RegisterClick = async (e) => {
         e.preventDefault();
         // inserting the user's input into variables
@@ -20,8 +19,6 @@ function Registerform() {
                 'Content-Type': 'application/json'
             }
         })
-        await response.status;
-
         // if status == 200, the user exists
         if (response.status == 200) {
             alert("Username already exists")
@@ -47,17 +44,14 @@ function Registerform() {
             return;
         }
         //inserting the new user to the server's DB
-        const insertUserPost = async () => {
-            await fetch('http://localhost:5000/api/Users', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ Username: username, Displayname: displayname, Password: password })
-            })
-        }
-        await insertUserPost();
-        
+        await fetch('http://localhost:5000/api/Users', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ Username: username, Displayname: displayname, Password: password })
+        })
+
         // getting the new user from the server's DB
         var user = await fetch('http://localhost:5000/api/Users/' + username, {
             method: 'GET',
@@ -77,21 +71,21 @@ function Registerform() {
                     <br />
 
                     <div className="row mb-3">
-                        <label htmlFor="Username" className="col-sm-3 col-form-label">Username*</label>
+                        <label htmlFor="Username" className="col-sm-3 col-form-label registerfield">Username*</label>
                         <div className="col-sm-7">
                             <input type="text" className="form-control" id="Username" placeholder="Enter your userName" required />
                         </div>
                     </div>
 
                     <div className="row mb-3">
-                        <label htmlFor="nickname" className="col-sm-3 col-form-label">Nickname*</label>
+                        <label htmlFor="nickname" className="col-sm-3 col-form-label registerfield">Nickname*</label>
                         <div className="col-sm-7">
                             <input type="text" className="form-control" id="Nickname" placeholder="Enter your nickname" required />
                         </div>
                     </div>
 
                     <div className="row mb-3">
-                        <label htmlFor="Password" className="col-sm-3 col-form-label">Password*</label>
+                        <label htmlFor="Password" className="col-sm-3 col-form-label registerfield">Password*</label>
                         <div className="col-sm-7">
                             <input type="password" className="form-control" id="Password" placeholder="Enter password" required />
                         </div>

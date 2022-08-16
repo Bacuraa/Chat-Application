@@ -13,7 +13,6 @@ function LoginForm() {
                 'Content-Type': 'application/json'
             }
         })
-        await response1.status;
         // if status == 404, user doesnt exist
         if (response1.status == 404) {
             alert("Username doesnt exist")
@@ -26,7 +25,6 @@ function LoginForm() {
                 'Content-Type': 'application/json'
             }
         })
-        await response2.status;
         // if status == 404, wrong password
         if (response2.status == 404) {
             alert("Wrong password")
@@ -52,20 +50,20 @@ function LoginForm() {
                         </div>
                         <br />
                         <div className="row mb-3">
-                            <label htmlFor="Username" className="col-sm-3 col-form-label col-form-label-sm">Username</label>
+                            <label className="col-sm-3 col-form-label">Username*</label>
                             <div className="col-sm-7">
-                                <input type="username" className="form-control form-control-sm" id="username" placeholder="Enter Username" required />
+                                <input type="username" className="form-control form-control" id="username" placeholder="Enter username" required />
                             </div>
                         </div>
 
                         <div className="row mb-3">
-                            <label htmlFor="password" className="col-sm-3 col-form-label-sm">Password</label>
+                            <label htmlFor="password" className="col-sm-3 col-form-label">Password*</label>
                             <div className="col-sm-7">
-                                <input type="password" className="form-control form-control-sm" id="password" placeholder="Enter password" required />
+                                <input type="password" className="form-control" id="password" placeholder="Enter password" required />
                             </div>
                         </div>
                         <div className="row-sm">
-                            <button type="button" className="btn btn-secondary" onClick={loginClick}>Login</button>
+                            <button type="button" className="btn btn-primary" onClick={loginClick}>Login</button>
                             <label className="m-1">Not registered? click <Link to="/register">here</Link> to register</label>
                         </div>
                     </div>

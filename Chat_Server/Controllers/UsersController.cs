@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Chat_Server.Models;
+using Chat_Server.Models.Requests;
 
 namespace Chat_Server.Controllers
 {
@@ -18,12 +19,12 @@ namespace Chat_Server.Controllers
         [HttpPost]
         [Route("/api/[controller]")]
         // adds a user
-        public void Add([Bind("Username,DisplayName,Password")] UserNoContacts userNoContacts)
+        public void Add([Bind("Username,DisplayName,Password")] AddUserPost addUserPost)
         {
             User user = new User();
-            user.Username = userNoContacts.Username;
-            user.DisplayName = userNoContacts.DisplayName;
-            user.Password = userNoContacts.Password;
+            user.Username = addUserPost.Username;
+            user.DisplayName = addUserPost.DisplayName;
+            user.Password = addUserPost.Password;
             user.Contacts = new List<Contact>();
             serverDB.addUser(user);
         }

@@ -1,6 +1,6 @@
 import './Chatscreen.css'
 import ContactCard from './ContactCard';
-import { useState, useEffect, React, useRef } from 'react'
+import { useState, useEffect, React } from 'react'
 import AddFriend from './AddFriend';
 import CurrentChat from './CurrentChat';
 import { useLocation } from 'react-router-dom';
@@ -8,9 +8,9 @@ import { HubConnectionBuilder } from '@microsoft/signalr';
 
 function Chatscreen() {
     const { state } = useLocation();
-    const loggedUser = useRef(state.loggedUser);
+    const loggedUser = state.loggedUser;
     const [signalRConnection, setSignalRConnection] = useState(null);
-    const [contacts, setContacts] = useState(loggedUser.current.contacts);
+    const [contacts, setContacts] = useState(loggedUser.contacts);
     const [currentContactChat, setCurrentContactChat] = useState({ displayName: "" })
 
     // scrolls the chat bar down whenever an activity happens
@@ -35,7 +35,7 @@ function Chatscreen() {
         if (signalRConnection) {
             signalRConnection.start()
                 .then(result => {
-                    signalRConnection.invoke("AddConnection", loggedUser.current.username)
+                    signalRConnection.invoke("AddConnection", loggedUser.username)
                     signalRConnection.on('ReceiveMessage', async (loggedUsername, contactUsername) => {
 
                         // gets the new contact with his messages from the server's DB (signalR invoke)
@@ -46,9 +46,13 @@ function Chatscreen() {
                                 'Content-Type': 'application/json'
                             }
                         })
+
                         invokedContactChat = await invokedContactChat.json();
-                        if (currentContactChat.username == contactUsername)
-                            await setCurrentContactChat(invokedContactChat);
+                        setCurrentContactChat(prevState => {
+                            if (prevState.contactUsername == contactUsername)
+                                return invokedContactChat
+                            return prevState;
+                        });
 
                         // gets the new contact list from the server's DB (signalR invoke)
                         var invokedContacts = await fetch('http://localhost:5000/api/' + loggedUsername + '/Contacts', {
@@ -58,70 +62,65 @@ function Chatscreen() {
                             }
                         })
                         invokedContacts = await invokedContacts.json();
-                        await setContacts(invokedContacts);
+                        setContacts(invokedContacts);
                     });
                 })
         }
     }, [signalRConnection]);
 
     // sends a message when 'Enter' key is pressed
-    var onKeyPressEnter = async (event) => {
-        if (event.key === 'Enter')
-            await handleSendMessage();
+    var onKeyPressEnter = async (e) => {
+        if (e.key === 'Enter')
+            await handleSendMessage(e);
     }
 
-    var handleSendMessage = async () => {
+    var handleSendMessage = async (e) => {
+        e.target.blur()
         var newMessageText = document.getElementById("chatBar").value
         // if the message is blank
         if (newMessageText == "") { return }
 
         // adds the message to the server's DB (author)
-        const addMessagePost1 = async () => {
-            await fetch('http://localhost:5000/api/'
-                + loggedUser.current.username + '/Contacts/' + currentContactChat.contactUsername + '/Messages', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ Content: newMessageText })
-            })
-        }
-        await addMessagePost1();
+        await fetch('http://localhost:5000/api/'
+            + loggedUser.username + '/Contacts/' + currentContactChat.contactUsername + '/Messages', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ Content: newMessageText })
+        })
         // adds the message to the server's DB (receiver)
-        const addMessagePost2 = async () => {
-            await fetch(`http://localhost:5000/api/Transfer`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ From: loggedUser.current.username, To: currentContactChat.contactUsername, Content: newMessageText })
-            })
-        }
-        await addMessagePost2();
+        await fetch(`http://localhost:5000/api/Transfer`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ From: loggedUser.username, To: currentContactChat.contactUsername, Content: newMessageText })
+        })
 
         // gets the new updated list of contacts
-        var newContacts = await fetch('http://localhost:5000/api/' + loggedUser.current.username + '/Contacts', {
+        var newContacts = await fetch('http://localhost:5000/api/' + loggedUser.username + '/Contacts', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
             }
         })
         newContacts = await newContacts.json();
-        await setContacts(newContacts);
+        setContacts(newContacts);
 
         // gets the new contact with his messages from the server's DB
         var contactChat = await fetch('http://localhost:5000/api/'
-            + loggedUser.current.username + '/Contacts/' + currentContactChat.contactUsername, {
+            + loggedUser.username + '/Contacts/' + currentContactChat.contactUsername, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
             }
         })
         contactChat = await contactChat.json();
-        await setCurrentContactChat(contactChat);
+        setCurrentContactChat(contactChat);
         document.getElementById("chatBar").value = "";
         // invoke signalR to the user that receives the message
-        await signalRConnection.invoke("SendMessage", currentContactChat.contactUsername, loggedUser.current.username);
+        await signalRConnection.invoke("SendMessage", currentContactChat.contactUsername, loggedUser.username);
     }
 
     return (
@@ -132,9 +131,9 @@ function Chatscreen() {
                     <div className="chat-header" id="profileAndButton">
                         <div id="myProfile">
                             <div><img id="myAvatar" src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp" /></div>
-                            <div><span id="myNickname">{loggedUser.current.displayName}</span></div>
+                            <div><span id="myNickname">{loggedUser.displayName}</span></div>
                         </div>
-                        <AddFriend loggedUser={loggedUser.current} setContacts={setContacts} signalRConnection={signalRConnection} currentContactChat={currentContactChat} />
+                        <AddFriend loggedUser={loggedUser} setContacts={setContacts} signalRConnection={signalRConnection} currentContactChat={currentContactChat} />
                     </div>
                     <ContactCard contacts={contacts} setCurrentContactChat={setCurrentContactChat} />
                 </div>

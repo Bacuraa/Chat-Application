@@ -1,27 +1,17 @@
-body {
-  margin:3%;
-  background: linear-gradient(120deg,#06123a,#da0106ab);
-  color:black;
-  font-family:Arial, Helvetica, sans-serif;
+html {
+  height: 100%;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+body {
+  min-height: 100%;
+  background: linear-gradient(120deg,#06123a,#da0106ab);
+  font-family:Arial, Helvetica, sans-serif;
 }
 
 input{
   box-shadow: inset 0px 0px 25px 0px rgb(94, 77, 77);
 }
-.logincontainer{
-  width:420px;
-  height:220px;
-  background:white;
-  color:black;
-  top:40%;
-  left:50%;
-  position:absolute;
-  transform: translate(-50%,-50%);
-  box-sizing: border-box;
-  border-radius: 2%;
+
+#root{
+  padding-top: 75px;
 }

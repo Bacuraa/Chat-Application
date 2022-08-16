@@ -1,23 +1,31 @@
 .registerbox{
-    padding-top:0%;
-    margin-top:0%;
-    padding-left: 2%;
-    left:50%;
-    width:30%;
+    position:relative;
+    left: 33.3%;
+    width:33.4%;
     background:rgb(194, 157, 145);
-    position:absoulte;
-    transform: translate(+105%,+8%);
-    box-sizing: border-box;
-    border-radius: 4%;
+    border-radius: 20px;
     padding-bottom: 1%;
   }
 
   .registerbox h1{
       color: white;
-      margin-top: 2%;
+      font-weight: 600;
+      margin-top: 6%;
   }
 
   .registerbox input{
-      border-left:2%;
-      margin-left: 12%;
+      border-left: 2%;
+      margin-left: 4%;
+  }
+
+  .registerField{
+    padding-top: 2;
+  }
+
+  #Password-verification-input{
+    padding-top: 8px;
+  }
+
+  #Password-verification-field{
+    padding-top: 3px;
   }
