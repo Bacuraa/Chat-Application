@@ -13,7 +13,8 @@ namespace Chat_Server.Models
         {
             using (var db = new UsersContext())
             {
-                return db.UsersDB.Include(x => x.Contacts).ThenInclude(x => x.messages).ToList();
+                return db.UsersDB.Include(x => x.Contacts)
+                    .ThenInclude(x => x.messages.OrderBy(y => y.SerialNumber)).ToList();
             }
         }
         public void addUser(User user)
@@ -40,8 +41,8 @@ namespace Chat_Server.Models
         {
             using (var db = new UsersContext())
             {
-                return db.UsersDB.Where(x => x.Username == username)
-                    .Include(x => x.Contacts).ThenInclude(x => x.messages).ToList()[0];
+                return db.UsersDB.Where(x => x.Username == username).Include(x => x.Contacts)
+                    .ThenInclude(x => x.messages.OrderBy(y => y.SerialNumber)).ToList()[0];
             }
         }
 
@@ -62,12 +63,10 @@ namespace Chat_Server.Models
         {
             using (var db = new UsersContext())
             {
-                var usersDB = db.UsersDB;
-                var contactsDB = db.ContactsDB;
-                List<User> user = usersDB.Where(x => x.Username == username)
-                    .Include(x => x.Contacts).ThenInclude(x => x.messages).ToList();
-                if (user[0] == null) return null;
-                return user[0].Contacts;
+                User user = db.UsersDB.Where(x => x.Username == username)
+                    .Include(x => x.Contacts).ThenInclude(x => x.messages.OrderBy(y => y.SerialNumber)).ToList()[0];
+                if (user == null) return null;
+                return user.Contacts;
 
             }
         }
@@ -84,12 +83,10 @@ namespace Chat_Server.Models
             //inserting the created contact into the server's DB
             using (var db = new UsersContext())
             {
-                var usersDB = db.UsersDB;
-                var contactsDB = db.ContactsDB;
-                List<User> user = usersDB.Where(x => x.Username == username)
-                    .Include(x => x.Contacts).ThenInclude(x => x.messages).ToList();
-                if (user[0] == null) return;
-                user[0].Contacts.Add(newContact);
+                User user = db.UsersDB.Where(x => x.Username == username)
+                    .Include(x => x.Contacts).ToList()[0];
+                if (user == null) return;
+                user.Contacts.Add(newContact);
                 db.SaveChanges();
             }
         }
@@ -97,22 +94,20 @@ namespace Chat_Server.Models
         {
             using (var db = new UsersContext())
             {
-                var contactsDB = db.ContactsDB;
                 string key = username + "_" + contactUsername;
-                List<Contact> contact = contactsDB.Where(x => x.Id == key).Include(x => x.messages).ToList();
+                Contact contact = db.ContactsDB.Where(x => x.Id == key)
+                    .Include(x => x.messages.OrderBy(y => y.SerialNumber)).ToList()[0];
                 if (contact == null) return null;
-                return contact[0];
+                return contact;
             }
         }
         public void editContact(string username, string contactUsername, string newDisplayName, string server)
         {
             using (var db = new UsersContext())
             {
-                var contactsDB = db.ContactsDB;
                 string key = username + "_" + contactUsername;
-                List<Contact> contact = contactsDB.Where(x => x.Id == key).Include(x => x.messages).ToList();
-                if (contact == null || contact[0] == null) return;
-                contact[0].DisplayName = newDisplayName;
+                Contact contact = db.ContactsDB.Find(key);
+                contact.DisplayName = newDisplayName;
                 db.SaveChanges();
             }
         }
@@ -120,11 +115,10 @@ namespace Chat_Server.Models
         {
             using (var db = new UsersContext())
             {
-                var contactsDB = db.ContactsDB;
                 string key = username + "_" + contactId;
-                Contact contact = contactsDB.Find(key);
+                Contact contact = db.ContactsDB.Find(key);
                 if (contact == null) return;
-                contactsDB.Remove(contact);
+                db.ContactsDB.Remove(contact);
                 db.SaveChanges();
             }
         }
@@ -145,42 +139,34 @@ namespace Chat_Server.Models
         {
             using (var db = new UsersContext())
             {
-                var usersDB = db.UsersDB;
-                var contactsDB = db.ContactsDB;
-                List<User> user = usersDB.Where(x => x.Username == invitation.To)
-                    .Include(x => x.Contacts).ThenInclude(x => x.messages).ToList();
-                if (user == null || user[0] == null) return false;
-                string key = invitation.To + "_" + invitation.From;
-                Contact contact = user[0].Contacts.Find(x => x.Id == key);
-                if (contact != null) return false;
+                User user = db.UsersDB.Where(x => x.Username == invitation.To)
+                    .Include(x => x.Contacts).ToList()[0];
+                if (user == null) return false;
 
                 // creating a new contact
-                contact = new Contact();
-                contact.Id = key;
+                Contact contact = new Contact();
+                contact.Id = invitation.To + "_" + invitation.From;
                 contact.ContactUsername = invitation.From;
                 contact.DisplayName = invitation.From;
-                contact.messages = new List<Message>();
                 contact.LastMessage = "";
                 contact.LastDate = "";
-                user[0].Contacts.Add(contact);
+                user.Contacts.Add(contact);
                 db.SaveChanges();
                 return true;
             }
         }
 
         //////////////////////////////////////////// MessagesController //////////////////////////////////////////////////
-        public IOrderedEnumerable<Message> getMessages(string username, string contactUsername)
+        public List<Message> getMessages(string username, string contactUsername)
         {
             using (var db = new UsersContext())
             {
-                var usersDB = db.UsersDB;
-                var messagesDB = db.MessagesDB;
-                List<User> user = usersDB.Where(x => x.Username == username)
-                    .Include(x => x.Contacts).ThenInclude(x => x.messages).ToList();
-                if (user == null || user[0] == null) return null;
-                Contact contact = user[0].Contacts.Find(x => x.ContactUsername == contactUsername);
+                var key = username + "_" + contactUsername;
+                Contact contact = db.ContactsDB.Where(x => x.Id == key)
+                    .Include(x => x.messages.OrderBy(y => y.SerialNumber)).ToList()[0];
                 if (contact == null) return null;
-                return contact.messages.OrderBy(x => x.SerialNumber);
+                return contact.messages;
+
             }
         }
 
@@ -201,13 +187,13 @@ namespace Chat_Server.Models
                 var contactsDB = db.ContactsDB;
                 List<User> user = usersDB.Where(x => x.Username == username)
                     .Include(x => x.Contacts).ThenInclude(x => x.messages).ToList();
-                string key = username + "_" + contactUsername;
-                List<Contact> contact = contactsDB.Where(x => x.Id == key)
-                    .Include(x => x.messages).ToList();
-                if (contact == null || contact[0] == null) return;
-                contact[0].messages.Add(newMessage);
-                contact[0].LastDate = DateTime.Now.ToString();
-                contact[0].LastMessage = newMessage.Content;
+                string contactKey = username + "_" + contactUsername;
+                Contact contact = db.ContactsDB.Where(x => x.Id == contactKey)
+                    .Include(x => x.messages).ToList()[0];
+                if (contact == null) return;
+                contact.messages.Add(newMessage);
+                contact.LastDate = DateTime.Now.ToString();
+                contact.LastMessage = newMessage.Content;
                 db.SaveChanges();
             }
         }
@@ -217,9 +203,9 @@ namespace Chat_Server.Models
             {
                 var messagesDB = db.MessagesDB;
                 string key = username + "_" + contactUsername + "_" + messageSerialNumber;
-                List<Message> message = messagesDB.Where(x => x.Id == key).ToList();
+                Message message = messagesDB.Where(x => x.Id == key).ToList()[0];
                 if (message == null) return null;
-                return message[0];
+                return message;
             }
         }
 
@@ -230,9 +216,9 @@ namespace Chat_Server.Models
             {
                 var messagesDB = db.MessagesDB;
                 string key = username + "_" + contactUsername + "_" + messageSerialNumber;
-                List<Message> message = messagesDB.Where(x => x.Id == key).ToList();
-                if (message == null || message[0] == null) return;
-                message[0].Content = content;
+                Message message = db.MessagesDB.Where(x => x.Id == key).ToList()[0];
+                if (message == null) return;
+                message.Content = content;
                 db.SaveChanges();
             }
         }
@@ -240,11 +226,10 @@ namespace Chat_Server.Models
         {
             using (var db = new UsersContext())
             {
-                var messagesDB = db.MessagesDB;
                 string key = username + "_" + contactUsername + "_" + messageSerialNumber;
-                List<Message> message = messagesDB.Where(x => x.Id == key).ToList();
-                if (message == null || message[0] == null) return;
-                messagesDB.Remove(message[0]);
+                Message message = db.MessagesDB.Where(x => x.Id == key).ToList()[0];
+                if (message == null) return;
+                db.MessagesDB.Remove(message);
                 db.SaveChanges();
             }
         }
@@ -254,14 +239,12 @@ namespace Chat_Server.Models
         {
             using (var db = new UsersContext())
             {
-                var usersDB = db.UsersDB;
-                var contactsDB = db.ContactsDB;
                 string key = transfer.To + "_" + transfer.From;
-                List<Contact> contact = contactsDB.Where(x => x.Id == key)
-                    .Include(x => x.messages).ToList();
-                if (contact == null || contact[0] == null) return;
-                string time = DateTime.UnixEpoch.ToString();
-                int id = contact[0].messages.Count();
+                Contact contact = db.ContactsDB.Where(x => x.Id == key)
+                    .Include(x => x.messages).ToList()[0];
+                if (contact == null) return;
+                string time = DateTime.Now.ToString();
+                int id = contact.messages.Count();
                 Message message = new Message()
                 {
                     Id = key + "_" + id.ToString(),
@@ -270,13 +253,13 @@ namespace Chat_Server.Models
                     SerialNumber = id,
                     Sent = false
                 };
-                contact[0].messages.Add(message);
-                contact[0].LastDate = time;
-                contact[0].LastMessage = transfer.Content;
+                contact.messages.Add(message);
+                contact.LastDate = time;
+                contact.LastMessage = transfer.Content;
                 db.SaveChanges();
                 ////////////////////////////////////////////// Firebase ///////////////////////////////////////////////////////
-                List<User> user = usersDB.Where(x => x.Username == transfer.To).ToList();
-                if (user.Count == 0) return;
+                /*User user = db.UsersDB.Where(x => x.Username == transfer.To).ToList()[0];
+                if (user == null) return;
                 //string token = user[0].Token;
                 //if (token == "") return;
 
@@ -311,7 +294,7 @@ namespace Chat_Server.Models
                 // registration token.
                 string response = FirebaseAdmin.Messaging.FirebaseMessaging.DefaultInstance.SendAsync(messageFirebase).Result;
                 // Response is a message ID string.
-                Console.WriteLine("Successfully sent message: " + response);
+                Console.WriteLine("Successfully sent message: " + response);*/
             }
         }
     }

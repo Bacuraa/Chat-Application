@@ -4,7 +4,6 @@ namespace Chat_Server.Models
 {
     public class Transfer
     {
-        [Key]
         [Required]
         public string From { get; set; }
 

@@ -13,6 +13,7 @@ function LoginForm() {
                 'Content-Type': 'application/json'
             }
         })
+        await response1.status;
         // if status == 404, user doesnt exist
         if (response1.status == 404) {
             alert("Username doesnt exist")
@@ -25,6 +26,7 @@ function LoginForm() {
                 'Content-Type': 'application/json'
             }
         })
+        await response2.status;
         // if status == 404, wrong password
         if (response2.status == 404) {
             alert("Wrong password")

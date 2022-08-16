@@ -10,17 +10,10 @@ namespace Chat_Server.Hubs
         {
             connections[username] = Context.ConnectionId;
         }
-        public Boolean Authenticate(string username) 
-        { 
-            if(connections.ContainsKey(username) && connections[username] == Context.ConnectionId)
-            {
-                return true;
-            }
-            return false;
-        }
-        public async Task SendMessage(Message message, string username)
+
+        public async Task SendMessage(string loggedUsername, string contactUsername)
         {
-            await Clients.Client(connections[username]).SendAsync("ReceiveMessage", message);
+            await Clients.Client(connections[loggedUsername]).SendAsync("ReceiveMessage", loggedUsername, contactUsername);
         }
     }
 }

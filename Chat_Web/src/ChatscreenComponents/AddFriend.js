@@ -31,6 +31,7 @@ function AddFriend(props) {
                 'Content-Type': 'application/json'
             }
         })
+        await checkContactUsername.status;
 
         if (checkContactUsername.status == 404) {
             alert("Username doesnt exist")
@@ -44,19 +45,37 @@ function AddFriend(props) {
                 'Content-Type': 'application/json'
             }
         })
+        await checkContact.status;
+
         if (checkContact.status == 200) {
             alert("The contact is already in your contacts list");
             return;
         }
 
-        // adds the contact to the server's DB
-        await fetch('http://localhost:5000/api/' + loggedUsername + '/Contacts', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ Username: contactUsername, DisplayName: contactDisplayname })
-        })
+        // adds the contact to the server's DB (the user that receives the friend request)
+        const addContactPost1 = async () => {
+            await fetch(`http://localhost:5000/api/Invitations`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ From: loggedUsername, To: contactUsername })
+            })
+        }
+
+        await addContactPost1();
+
+        // adds the contact to the server's DB (current loggedUser)
+        const addContactPost2 = async () => {
+            await fetch('http://localhost:5000/api/' + loggedUsername + '/Contacts', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ Username: contactUsername, DisplayName: contactDisplayname })
+            })
+        }
+        await addContactPost2();
 
         // gets the new contact list from the server's DB
         var currentContacts = await fetch('http://localhost:5000/api/' + loggedUsername + '/Contacts', {
@@ -66,7 +85,9 @@ function AddFriend(props) {
             }
         })
         currentContacts = await currentContacts.json();
-        props.setContacts(currentContacts);
+        await props.setContacts(currentContacts);
+        // invoke signalR for the receiving friend request user
+        await props.signalRConnection.invoke("SendMessage", contactUsername, loggedUsername);
         handleClose();
     }
 

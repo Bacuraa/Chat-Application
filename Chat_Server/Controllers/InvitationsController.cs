@@ -9,7 +9,7 @@ namespace Chat_Server.Controllers
     {
         private ServerDB serverDB = new ServerDB();
         [HttpPost]
-        public IActionResult Post([Bind("From,To,Server")] Invitation invitation)
+        public IActionResult Post([Bind("From,To")] Invitation invitation)
         {
             Boolean b = serverDB.inviteContact(invitation);
             if (b)

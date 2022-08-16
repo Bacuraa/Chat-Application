@@ -20,6 +20,8 @@ function Registerform() {
                 'Content-Type': 'application/json'
             }
         })
+        await response.status;
+
         // if status == 200, the user exists
         if (response.status == 200) {
             alert("Username already exists")
@@ -45,13 +47,17 @@ function Registerform() {
             return;
         }
         //inserting the new user to the server's DB
-        await fetch('http://localhost:5000/api/Users', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ Username: username, Displayname: displayname, Password: password })
-        })
+        const insertUserPost = async () => {
+            await fetch('http://localhost:5000/api/Users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ Username: username, Displayname: displayname, Password: password })
+            })
+        }
+        await insertUserPost();
+        
         // getting the new user from the server's DB
         var user = await fetch('http://localhost:5000/api/Users/' + username, {
             method: 'GET',
@@ -59,7 +65,7 @@ function Registerform() {
                 'Content-Type': 'application/json'
             }
         })
-        navigate("/chat", { state: { loggedUser: await user.json()}});
+        navigate("/chat", { state: { loggedUser: await user.json() } });
     }
     return (
         <div className="registerbox">

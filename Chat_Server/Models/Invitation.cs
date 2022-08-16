@@ -11,7 +11,5 @@ namespace Chat_Server.Models
         [Required]
         public string To { get; set; }
 
-        [Required]
-        public string Server { get; set; }
     }
 }

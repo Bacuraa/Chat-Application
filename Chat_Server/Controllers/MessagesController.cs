@@ -10,11 +10,11 @@ namespace Chat_Server.Controllers
     {
         private ServerDB serverDB = new ServerDB();
         [HttpGet]
-        [Route("/api/{username}/Contacts/{contactId}/[controller]")]
+        [Route("/api/{username}/Contacts/{contactUsername}/[controller]")]
         // returns a list of messages from a specific contact
-        public IEnumerable<Message> Get(string username, string contactId)
+        public IEnumerable<Message> Get(string username, string contactUsername)
         {
-            return serverDB.getMessages(username, contactId);
+            return serverDB.getMessages(username, contactUsername);
         }
 
 

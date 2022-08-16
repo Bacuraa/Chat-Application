@@ -13,7 +13,7 @@ namespace Chat_Server.Controllers
         private ServerDB serverDB = new ServerDB();
         [HttpGet]
         [Route("/api/{username}/[controller]")]
-        // gets contacts by username
+        // get contacts by username
         public List<Contact> Get(string username)
         {
             return serverDB.getContacts(username);
@@ -28,7 +28,7 @@ namespace Chat_Server.Controllers
         }
 
         [HttpGet]
-        [Route("/api/{username}/[controller]/{contactId}")]
+        [Route("/api/{username}/[controller]/{contactUsername}")]
         // returns a specific contact
         public Contact Details(string username, string contactUsername)
         {
@@ -36,7 +36,7 @@ namespace Chat_Server.Controllers
         }
 
         [HttpPut]
-        [Route("/api/{username}/[controller]/{contactId}")]
+        [Route("/api/{username}/[controller]/{contactUsername}")]
         // edits a contact
         public void Put(string username, string contactUsername, string newDisplayName, string server)
         {
@@ -44,7 +44,7 @@ namespace Chat_Server.Controllers
         }
 
         [HttpDelete]
-        [Route("/api/{username}/[controller]/{contactId}")]
+        [Route("/api/{username}/[controller]/{contactUsername}")]
         // deletes a contact
         public void Delete(string username,string contactUsername)
         {
