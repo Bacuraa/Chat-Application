@@ -119,6 +119,7 @@ function Chatscreen() {
         contactChat = await contactChat.json();
         setCurrentContactChat(contactChat);
         document.getElementById("chatBar").value = "";
+        document.getElementById("chatBar").focus();
         // invoke signalR to the user that receives the message
         await signalRConnection.invoke("SendMessage", currentContactChat.contactUsername, loggedUser.username);
     }
