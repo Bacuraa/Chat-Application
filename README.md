@@ -29,4 +29,7 @@ After it has finished, navigate back to project_name directory run and following
 ### `npm install react-router-dom@6`
 ### `npm start`
 
-Now open http://localhost:3000 to view the project in your browser. Now as long as the server is running, the website can interact with the server.
+Now open http://localhost:3000 to view the project in your browser. Now as long as the server is running, the website can interact with the server and have a chat with other people.
+
+<h3>Chat-Android</h3>
+The android version of the website has not been completed yet, so stay tuned :)
