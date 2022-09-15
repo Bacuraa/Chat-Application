@@ -15,10 +15,14 @@ note: make sure your local mariaDB password corresponds to the password displaye
 The server default URL - "http://localhost:5000"
  
 <h3>Chat-Web</h3>
-The website works with React. Thus, in order to run the website we will need to install the related files first:
-1) Download Node.JS in your computer in order to be able to run npm commands in the cmd
-2) Enter cmd, and write "npx create-react-app project_name", where project_name is the file name of the file which will consist the files inside "Chat-Web" (you will download it from this git repository). This command will install some react realted files too. It is required to have react bootstrap files as well. please run the follwing command at the node_modules directory in cmd (which you have just downloaded by using the npx create-react-app command) and type the following command "npm install react-bootstrap bootstrap". after it has finished, navigate back to project_name directory run and following 3 commands:
+The website works with React. Thus, in order to run the website we will need to install the related files first. Firstly, Download Node.JS in your computer in order to be able to run npm commands in the cmd. Secondly, we will run some npm command to fully install the required files. Enter cmd, and write the following command:
+### `npx create-react-app project_name`
+"project_name" is the file name of the file which will consist the files inside "Chat-Web" (you will download it from this git repository). This command will install some react realted files (node-modules). It is required to have react bootstrap files as well. please run the follwing command at the node_modules directory in cmd (which you have just downloaded by using the npx create-react-app command) and type the:
+### `npm install react-bootstrap bootstrap`
+After it has finished, navigate back to project_name directory run and following 3 commands:
 
-## `npm install bootstrap`
-## `npm install react-router-dom@6`
-## `npm start`
+### `npm install bootstrap`
+### `npm install react-router-dom@6`
+### `npm start`
+
+Now open http://localhost:3000 to view the project in your browser. Now as long as the server is running, the website can interact with the server.
