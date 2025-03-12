@@ -1,0 +1,17 @@
+html {
+  height: 100%;
+}
+
+body {
+  min-height: 100%;
+  background: linear-gradient(120deg,#06123a,#da0106ab);
+  font-family:Arial, Helvetica, sans-serif;
+}
+
+input{
+  box-shadow: inset 0px 0px 25px 0px rgb(94, 77, 77);
+}
+
+#root{
+  padding-top: 75px;
+}

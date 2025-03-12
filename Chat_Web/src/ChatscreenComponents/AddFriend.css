@@ -1,0 +1,49 @@
+#addFriendButton{
+    font-size: 25px;
+    width: 100%;
+    background-color: green;
+    border: green;
+}
+
+.modal-header{
+    display: grid;
+    font-size: 30px;
+    grid-template-columns: 91% 9%;
+}
+
+#modal-title{
+    text-align: center;
+    font-size: 30px;
+    font-weight:bold;
+    padding-left: 9%;
+}
+
+#contact-username{
+    display: grid;
+    grid-template-columns: 20% 19% 41%;
+}
+
+.modal-body{
+    display: grid;
+    text-align: center;
+}
+
+#contact-nickname{
+    display: grid;
+    grid-template-columns: 20% 19% 41%;
+    padding-top: 20px;
+}
+
+#Username{
+    padding-top: 4px;
+}
+
+#Nickname{
+    padding-top: 4px;
+}
+
+.modal-footer{
+    display: grid;
+    grid-template-columns: 50% 50%;
+    justify-content: center;
+}

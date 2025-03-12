@@ -1,0 +1,19 @@
+.loginbox{
+    position: relative;
+    left: 33.3%;
+    width:33.4%;
+    background:rgb(194, 157, 145);
+    border-radius: 20px;
+    padding-bottom: 1%;
+  }
+
+  .loginbox h1{
+      color: white;
+      font-weight: 600;
+      margin-top: 6%;
+  }
+
+  .loginbox input{
+      border-left: 2%;
+      margin-left: 4%;
+  }
