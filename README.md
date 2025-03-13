@@ -1,7 +1,5 @@
 <h3>Demonstration of the application in Youtube: https://www.youtube.com/watch?v=Z4tj43wWC74</h3>
 
-How to run the "Chat-Application" files.
-
 The git repository contains 3 files:
 1. Chat_Server
 2. Chat_Web
