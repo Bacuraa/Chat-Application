@@ -1,4 +1,4 @@
-<h1>**Demonstration of the application in Youtube: https://www.youtube.com/watch?v=Z4tj43wWC74**</h1>
+<h2>**Demonstration of the application in Youtube: https://www.youtube.com/watch?v=Z4tj43wWC74**</h2>
 
 How to run the "Chat-Application" files.
 
