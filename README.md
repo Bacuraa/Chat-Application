@@ -1,8 +1,11 @@
 <h3>Demonstration of the application in Youtube: https://www.youtube.com/watch?v=Z4tj43wWC74</h3>
 <br>
 The git repository contains 3 files:
+<br>
 1. Chat_Server
+<br>
 2. Chat_Web
+<br>
 3. Chat_Android (hasnt been finished yet)
 
 <h3>Chat-Server</h3>
